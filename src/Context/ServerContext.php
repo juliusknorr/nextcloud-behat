@@ -201,6 +201,9 @@ class ServerContext implements Context {
 				$loginUrl,
 				[
 					'cookies' => $this->getCookieJar(),
+					'headers' => [
+						'Origin' => 'https://localhost:8080/index.php/login',
+					],
 				]
 			);
 			$this->extractRequestTokenFromResponse($response);
@@ -219,6 +222,9 @@ class ServerContext implements Context {
 			$loginUrl,
 			[
 				'cookies' => $this->getCookieJar(),
+				'headers' => [
+					'Origin' => 'https://localhost:8080/index.php/login',
+				],
 			]
 		);
 		$this->extractRequestTokenFromResponse($response);
@@ -234,6 +240,9 @@ class ServerContext implements Context {
 					'requesttoken' => $this->requestToken,
 				],
 				'cookies' => $this->getCookieJar(),
+				'headers' => [
+					'Origin' => 'https://localhost:8080/index.php/login',
+				],
 			]
 		);
 		$this->extractRequestTokenFromResponse($response);
