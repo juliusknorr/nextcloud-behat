@@ -1,4 +1,5 @@
 <?php
+
 /*
  * @copyright Copyright (c) 2021 Julius Härtl <jus@bitgrid.net>
  *
@@ -151,7 +152,7 @@ class ServerContext implements Context {
 		$this->sendOCSRequest('GET', '/cloud/users/' . $user);
 	}
 
-	private function createUser(string $user, string $displayName = null): void {
+	private function createUser(string $user, ?string $displayName = null): void {
 		$this->actAsAdmin(function () use ($user, $displayName) {
 			$this->sendOCSRequest('POST', '/cloud/users', [
 				'userid' => $user,
@@ -178,7 +179,7 @@ class ServerContext implements Context {
 		}
 	}
 
-	private function setUserDisplayName(string $userId, string $displayName = null): void {
+	private function setUserDisplayName(string $userId, ?string $displayName = null): void {
 		$this->actAsAdmin(function () use ($userId, $displayName) {
 			$this->sendOCSRequest('PUT', '/cloud/users/' . $userId, [
 				'key' => 'displayname',
@@ -190,7 +191,7 @@ class ServerContext implements Context {
 	/**
 	 * @Given Using web as user :user
 	 */
-	public function usingWebAsUser(string $user = null): void {
+	public function usingWebAsUser(?string $user = null): void {
 		if ($user === null) {
 			$this->anonymousUser = true;
 			$loginUrl = $this->getBaseUrl() . 'index.php/login';
@@ -287,7 +288,7 @@ class ServerContext implements Context {
 					'json' => $data,
 				], $options)
 			);
-		} catch (ClientException | ServerException $e) {
+		} catch (ClientException|ServerException $e) {
 			$this->response = $e->getResponse();
 			throw $e;
 		}
@@ -308,7 +309,7 @@ class ServerContext implements Context {
 					]
 				]
 			);
-		} catch (ClientException | ServerException $e) {
+		} catch (ClientException|ServerException $e) {
 			$this->response = $e->getResponse();
 		}
 	}
@@ -328,7 +329,7 @@ class ServerContext implements Context {
 					'auth' => $this->getAuth()
 				], $options)
 			);
-		} catch (ClientException | ServerException $e) {
+		} catch (ClientException|ServerException $e) {
 			$this->response = $e->getResponse();
 		}
 	}

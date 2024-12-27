@@ -1,4 +1,5 @@
 <?php
+
 /*
  * @copyright Copyright (c) 2021 Julius Härtl <jus@bitgrid.net>
  *
@@ -69,7 +70,7 @@ class SharingContext implements Context {
 			$dateModification = $fd['expireDate'];
 			$fd['expireDate'] = date('Y-m-d', strtotime($dateModification));
 		}
-		$this->serverContext->sendOCSRequest('POST', $this->sharingApiUrl("shares"), $fd);
+		$this->serverContext->sendOCSRequest('POST', $this->sharingApiUrl('shares'), $fd);
 		if ($this->serverContext->getResponse()->getStatusCode() === 200) {
 			$this->lastShareData = $this->serverContext->getOCSResponseData();
 		}
@@ -101,7 +102,7 @@ class SharingContext implements Context {
 	 */
 	public function acceptLastPendingShare(string $user): void {
 		$this->serverContext->setCurrentUser($user);
-		$this->serverContext->sendOCSRequest('GET', $this->sharingApiUrl("remote_shares/pending"), null);
+		$this->serverContext->sendOCSRequest('GET', $this->sharingApiUrl('remote_shares/pending'), null);
 		$this->serverContext->assertHttpStatusCode(200);
 		$this->serverContext->theOCSStatusCodeShouldBe(200);
 		$response = $this->serverContext->getOCSResponseData();
@@ -131,10 +132,10 @@ class SharingContext implements Context {
 	 */
 	public function deletingLastShare(): void {
 		$shareId = $this->lastShareData['id'];
-		$this->serverContext->sendOCSRequest("DELETE", $this->sharingApiUrl("/shares/$shareId"), null);
+		$this->serverContext->sendOCSRequest('DELETE', $this->sharingApiUrl("/shares/$shareId"), null);
 	}
 
 	private function sharingApiUrl(string $endpoint): string {
-		return sprintf("/apps/files_sharing/api/v%s/", $this->sharingAPIVersion) . ltrim($endpoint, '/');
+		return sprintf('/apps/files_sharing/api/v%s/', $this->sharingAPIVersion) . ltrim($endpoint, '/');
 	}
 }

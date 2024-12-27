@@ -1,4 +1,5 @@
 <?php
+
 /*
  * @copyright Copyright (c) 2021 Julius Härtl <jus@bitgrid.net>
  *
@@ -61,7 +62,7 @@ class FilesContext implements Context {
 		$this->serverContext->setCurrentUser($user);
 		$this->serverContext->usingWebAsUser($user);
 		$file = Utils::streamFor(fopen($source, 'rb'));
-		$this->makeGuzzleDavRequest("PUT", $destination, null, $file);
+		$this->makeGuzzleDavRequest('PUT', $destination, null, $file);
 	}
 
 	/**
@@ -73,7 +74,7 @@ class FilesContext implements Context {
 		$this->serverContext->setCurrentUser($user);
 		$this->serverContext->usingWebAsUser($user);
 		$destination = '/' . ltrim($destination, '/');
-		$this->makeGuzzleDavRequest("MKCOL", $destination, []);
+		$this->makeGuzzleDavRequest('MKCOL', $destination, []);
 	}
 
 	/**
@@ -128,7 +129,7 @@ class FilesContext implements Context {
 		return self::DAV_PATH_NEW . '/files/' . $user . '/';
 	}
 
-	public function makeGuzzleDavRequest($method, $path, $headers = null, $body = null, $type = "files"): ResponseInterface {
+	public function makeGuzzleDavRequest($method, $path, $headers = null, $body = null, $type = 'files'): ResponseInterface {
 		$fullUrl = $this->generateDavPath($type, ltrim($path, '/'));
 		$options = array_filter([
 			'headers' => $headers,
@@ -139,7 +140,7 @@ class FilesContext implements Context {
 		});
 		try {
 			return $this->serverContext->sendRawRequest($method, $fullUrl, $options);
-		} catch (ServerException | ClientException $e) {
+		} catch (ServerException|ClientException $e) {
 			return $e->getResponse();
 		}
 	}
@@ -149,7 +150,7 @@ class FilesContext implements Context {
 	}
 
 	/** @depreacted Use getSabreFilesClient */
-	public function getSabreClient(string $user = null, string $path = '/'): SabreClient {
+	public function getSabreClient(?string $user = null, string $path = '/'): SabreClient {
 		if ($user) {
 			$this->serverContext->setCurrentUser($user);
 		}
@@ -189,7 +190,7 @@ class FilesContext implements Context {
 			// Just needed as a fallback for the old dav path
 			return $this->encodePath($this->getDavFilesPath($user) . $path);
 		}
-		return $this->encodePath(self::DAV_PATH_NEW . '/' . $type .  '/' . $user . '/' . ltrim($path, '/'));
+		return $this->encodePath(self::DAV_PATH_NEW . '/' . $type . '/' . $user . '/' . ltrim($path, '/'));
 	}
 
 	/**
